@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { ENV_CONFIG } from '../../core/config/environment.config';
 import { Observable } from 'rxjs';
 
@@ -17,8 +17,8 @@ export abstract class BaseService<T> {
     return this.http.get<T | T[]>(`${this.url}/${path}`, { params });
   }
 
-  post<R>(body: R, path: string = ''): Observable<T> {
-    return this.http.post<T>(`${this.url}/${path}`, body);
+  post<R>(body: R, path: string = '', context?: HttpContext): Observable<T> {
+    return this.http.post<T>(`${this.url}/${path}`, body, { context });
   }
 
   put<R>(path: string, body: R): Observable<T> {
