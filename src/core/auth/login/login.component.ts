@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { LoginStore } from './state/user-login.store';
-import { LoginResponse } from '../model/login-response.model';
 import { LoginRequest } from '../model/login-request.model';
 
 @Component({
