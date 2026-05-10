@@ -6,6 +6,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { LoginStore } from './state/user-login.store';
+import { LoginResponse } from '../model/login-response.model';
+import { LoginRequest } from '../model/login-request.model';
 
 @Component({
   standalone: true,
@@ -23,6 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
+  private store = inject(LoginStore);
 
   protected loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -30,6 +34,6 @@ export class LoginComponent {
   });
 
   onSubmit() {
-    console.log(this.loginForm.value);
+    this.store.login(this.loginForm.value as LoginRequest);
   }
 }

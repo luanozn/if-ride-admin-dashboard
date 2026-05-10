@@ -1,10 +1,11 @@
 import { BaseService } from '../../../shared/service/base.service';
 import { LoginResponse } from '../model/login-response.model';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { HttpContext } from '@angular/common/http';
 import { IS_PUBLIC } from '../auth.context';
 import { TokenService } from './token.service';
+import { LoginRequest } from '../model/login-request.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseService<LoginResponse> {
@@ -12,14 +13,14 @@ export class AuthService extends BaseService<LoginResponse> {
 
   protected readonly path = 'v1/auth';
 
-  login(email: string, password: string): void {
-    this.post(
-      {
-        email,
-        password,
-      },
+  async login(loginRequest: LoginRequest): Promise<LoginResponse> {
+    const response = await firstValueFrom(this.post(
+      loginRequest,
       'login',
       new HttpContext().set(IS_PUBLIC, true),
-    ).subscribe((token) => this.tokenService.saveToken(token.token));
+    ));
+
+    this.tokenService.saveToken(response.token);
+    return response;
   }
 }
