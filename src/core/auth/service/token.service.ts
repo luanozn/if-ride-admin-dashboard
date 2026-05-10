@@ -1,6 +1,7 @@
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, } from 'jwt-decode';
 import { isPlatformBrowser } from '@angular/common';
+import { IfRideJwtPayload } from '../model/if-ride-jwt-payload';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
@@ -13,7 +14,7 @@ export class TokenService {
     }
   }
 
-  getToken(): string | null {
+  loadTokenFromDisk(): string | null {
     if(isPlatformBrowser(this.platformId)) {
       return localStorage.getItem(this.TOKEN_KEY);
     }
@@ -26,16 +27,26 @@ export class TokenService {
     }
   }
 
-  isValid(): boolean {
-      const token = this.getToken();
-      if (!token) return false;
+  isValid(token?: string): boolean {
+    return this.performActionOnToken((decoded) => {
+      const currentTime = Math.floor(Date.now() / 1000);
+      return decoded.exp! > currentTime;
+    }, token);
+  }
 
-      try {
-        const decoded: any = jwtDecode(token);
-        const currentTime = Math.floor(Date.now() / 1000);
-        return decoded.exp > currentTime;
-      } catch {
-        return false;
-      }
+  hasAdminPermission(token: string): boolean {
+    return this.performActionOnToken((decoded) => {
+      return decoded.role === 'ADMIN';
+    }, token);
+  }
+
+  private performActionOnToken(callback: (payload: IfRideJwtPayload) => boolean, token?: string,): boolean {
+    if (!token) return false;
+    try {
+      const decoded: IfRideJwtPayload = jwtDecode(token);
+      return callback(decoded);
+    } catch {
+      return false;
+    }
   }
 }

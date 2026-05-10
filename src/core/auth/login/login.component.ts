@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,6 +28,8 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private store = inject(LoginStore);
 
+  protected hidePassword  = signal(true);
+
   protected loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
@@ -35,5 +37,11 @@ export class LoginComponent {
 
   onSubmit() {
     this.store.login(this.loginForm.value as LoginRequest);
+  }
+
+  togglePassword(event: MouseEvent): void {
+    this.hidePassword.update(value => !value);
+    event.preventDefault();
+    event.stopPropagation();
   }
 }

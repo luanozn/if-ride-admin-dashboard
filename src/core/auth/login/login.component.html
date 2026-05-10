@@ -19,8 +19,24 @@
 
       <mat-form-field appearance="outline" class="w-full">
         <mat-label>Senha</mat-label>
-        <input matInput [type]="'password'" formControlName="password">
-        <mat-icon matSuffix class="text-slate-400">lock</mat-icon>
+
+        <input matInput
+               [type]="hidePassword() ? 'password' : 'text'"
+               formControlName="password">
+
+        <button mat-icon-button
+                matSuffix
+                type="button"
+                (click)="togglePassword($event)"
+                [attr.aria-label]="'Alternar visibilidade da senha'"
+                [attr.aria-pressed]="!hidePassword()">
+
+          <mat-icon class="text-slate-400">
+            {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+
+        <mat-icon matPrefix class="text-slate-400 mr-2">lock</mat-icon>
       </mat-form-field>
 
       <button mat-flat-button color="primary"

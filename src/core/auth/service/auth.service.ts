@@ -14,13 +14,10 @@ export class AuthService extends BaseService<LoginResponse> {
   protected readonly path = 'v1/auth';
 
   async login(loginRequest: LoginRequest): Promise<LoginResponse> {
-    const response = await firstValueFrom(this.post(
+    return await firstValueFrom(this.post(
       loginRequest,
       'login',
       new HttpContext().set(IS_PUBLIC, true),
     ));
-
-    this.tokenService.saveToken(response.token);
-    return response;
   }
 }
