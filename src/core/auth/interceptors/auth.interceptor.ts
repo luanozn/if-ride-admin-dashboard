@@ -14,7 +14,7 @@ export function authInterceptor(
   if(req.context.get(IS_PUBLIC)) {
     return next(req);
   }
-  const token = tokenService.getToken();
+  const token = tokenService.loadTokenFromDisk();
 
   const authReq = token ? req.clone({
     setHeaders: { Authorization: `Bearer ${token}` }
