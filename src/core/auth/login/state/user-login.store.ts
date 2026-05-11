@@ -64,6 +64,9 @@ export const LoginStore = signalStore(
           const authInfo = await authService.login(loginRequest);
           if (!tokenService.hasAdminPermission(authInfo.token)) {
             await this.logout();
+            patchState(store, {
+              isLoading: false,
+            })
             throw new ForbiddenException('Você não tem permissão para acessar o painel administrativo.');
           }
 
@@ -89,6 +92,10 @@ export const LoginStore = signalStore(
           else if (error instanceof ForbiddenException || error instanceof Error) {
             errorMessage = error.message;
           }
+
+          patchState(store, {
+            isLoading: false,
+          })
 
           snack.open(errorMessage, 'Fechar', {
             duration: 5000,
