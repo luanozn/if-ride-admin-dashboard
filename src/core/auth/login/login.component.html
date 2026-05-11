@@ -39,11 +39,17 @@
         <mat-icon matPrefix class="text-slate-400 mr-2">lock</mat-icon>
       </mat-form-field>
 
-      <button mat-flat-button color="primary"
-              class="w-full py-6 rounded-xl text-lg font-semibold mt-4 transition-transform active:scale-95"
-              [disabled]="loginForm.invalid ">
-        {{ 'Entrar' }}
-      </button>
+      @if(isLoading()) {
+        <div class="flex justify-center items-center">
+          <mat-spinner [diameter]="50"></mat-spinner>
+        </div>
+      } @else {
+        <button mat-flat-button color="primary"
+                class="w-full py-6 rounded-xl text-lg font-semibold mt-4 transition-transform active:scale-95"
+                [disabled]="loginForm.invalid ">
+          {{ 'Entrar' }}
+        </button>
+      }
 
     </form>
 

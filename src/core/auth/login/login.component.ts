@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { LoginStore } from './state/user-login.store';
 import { LoginRequest } from '../model/login-request.model';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
@@ -20,6 +21,7 @@ import { LoginRequest } from '../model/login-request.model';
     MatCardModule,
     ReactiveFormsModule,
     CommonModule,
+    MatProgressSpinner,
   ],
   templateUrl: './login.component.html',
 })
@@ -27,7 +29,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private store = inject(LoginStore);
 
-  protected hidePassword  = signal(true);
+  protected hidePassword = signal(true);
 
   protected loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -38,8 +40,12 @@ export class LoginComponent {
     this.store.login(this.loginForm.value as LoginRequest);
   }
 
+  isLoading(): boolean {
+    return this.store.isLoading();
+  }
+
   togglePassword(event: MouseEvent): void {
-    this.hidePassword.update(value => !value);
+    this.hidePassword.update((value) => !value);
     event.preventDefault();
     event.stopPropagation();
   }
