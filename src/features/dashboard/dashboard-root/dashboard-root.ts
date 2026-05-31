@@ -1,24 +1,35 @@
-import { Component, inject } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatSuffix } from '@angular/material/input';
-import { TokenService } from '../../../core/auth/service/token.service';
-import { LoginStore } from '../../../core/auth/login/state/user-login.store';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
+import { MatButton } from '@angular/material/button';
+import { NgForOf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-dashboard-root',
-  imports: [MatIconButton, MatIcon],
+  selector: 'app-applications',
+  imports: [MatButton, NgForOf, MatIcon],
   templateUrl: './dashboard-root.html',
 })
 export class DashboardRoot {
-  private readonly tokenService = inject(TokenService);
-  private readonly store = inject(LoginStore);
-  private readonly router = inject(Router);
+  solicitacoes = [
+    { id: 1, nome: 'João Silva', cnh: '123456789', status: 'PENDENTE' },
+    { id: 2, nome: 'Pedro Pereira', cnh: '987654312', status: 'APPROVED' },
+  ];
 
-  async logout(): Promise<void> {
-    await this.store.logout();
-    this.tokenService.removeToken();
-    await this.router.navigate(['/login']);
+  constructor(private dialog: MatDialog) {}
+
+  abrirDetalhes(usuario: any) {
+    const dialogRef = this.dialog.open(ApplicationDetailsDialog, {
+      width: '500px',
+      data: usuario,
+    });
+
+    dialogRef.afterClosed().subscribe((resultado) => {
+      if (resultado?.action === 'REJECT') {
+        console.log('Recusado por:', resultado.reason);
+      } else if (resultado?.action === 'APPROVE') {
+        console.log('Aprovado');
+      }
+    });
   }
 }
