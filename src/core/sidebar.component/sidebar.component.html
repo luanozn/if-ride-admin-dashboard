@@ -1,0 +1,41 @@
+<aside class="w-72 bg-white border-r border-gray-100 h-screen flex flex-col shadow-sm font-sans flex-shrink-0">
+
+  <div class="p-6 border-b border-gray-100 flex items-center gap-4">
+    <div class="bg-[#3b8c2e] w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-white shadow-md">
+      <mat-icon>directions_car</mat-icon>
+    </div>
+    <div>
+      <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight m-0">IF Ride</h1>
+      <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Painel Admin</span>
+    </div>
+  </div>
+
+  <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+
+    <a routerLink="/administradores"
+       routerLinkActive="bg-[#3b8c2e]/10 text-[#3b8c2e] font-bold"
+       [routerLinkActiveOptions]="{exact: false}"
+       class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors duration-200">
+      <mat-icon class="text-inherit">admin_panel_settings</mat-icon>
+      <span class="text-base">Administradores</span>
+    </a>
+
+    <a routerLink="/applications"
+       routerLinkActive="bg-[#3b8c2e]/10 text-[#3b8c2e] font-bold"
+       [routerLinkActiveOptions]="{exact: false}"
+       class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors duration-200">
+      <mat-icon class="text-inherit">assignment_ind</mat-icon>
+      <span class="text-base">Solicitações</span>
+    </a>
+
+  </nav>
+
+  <div class="p-6 border-t border-gray-100 bg-gray-50/50">
+    <button class="flex items-center gap-3 w-full px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-200 transition-colors duration-200"
+    (click)="onClickExit()">
+      <mat-icon class="text-gray-500">logout</mat-icon>
+      <span class="text-sm font-semibold">Sair da conta</span>
+    </button>
+  </div>
+
+</aside>
