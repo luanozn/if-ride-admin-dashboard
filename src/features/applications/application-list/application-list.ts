@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
-import { MatButton } from '@angular/material/button';
 import { NgForOf } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
+import { ListItemComponent } from '../../../shared/components/list-item/list-item.component';
 
 @Component({
   selector: 'app-applications',
-  imports: [MatButton, NgForOf, MatIcon],
+  imports: [ NgForOf, ListItemComponent],
   templateUrl: './application-list.html',
 })
 export class ApplicationList {

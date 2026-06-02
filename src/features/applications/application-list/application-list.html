@@ -7,33 +7,11 @@
   </div>
 
   <div class="solicitacoes-list space-y-5">
-    <div *ngFor="let req of solicitacoes"
-         class="solicitacao-card bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex items-center gap-6">
-
-      <div class="avatar-container flex-shrink-0 bg-indigo-50 text-primary p-4 rounded-full border border-indigo-100">
-        <mat-icon class="scale-125">person_outline</mat-icon>
-      </div>
-
-      <div class="info-container flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-        <div class="nome-group">
-          <span class="text-sm font-medium text-gray-500 block mb-0.5">Nome completo</span>
-          <span class="text-xl font-bold text-gray-950">{{ req.nome }}</span>
-        </div>
-        <div class="cnh-group flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-xl self-start md:self-center">
-          <mat-icon class="text-gray-400 text-base">card_membership</mat-icon>
-          <span class="text-sm text-gray-700 font-mono">CNH: <strong>{{ req.cnh }}</strong></span>
-        </div>
-      </div>
-
-      <!-- Ações -->
-      <div class="action-container flex-shrink-0">
-        <button mat-flat-button color="primary"
-                class="detalhes-btn flex items-center gap-2 rounded-full px-6 py-3 h-auto"
-                (click)="abrirDetalhes(req)">
-          <mat-icon class="text-lg">open_in_new</mat-icon>
-          <span class="font-semibold">Ver Detalhes</span>
-        </button>
-      </div>
-    </div>
+    <app-list-item
+      class="mb-2"
+      *ngFor="let req of solicitacoes"
+      [user]="req"
+      [showDetails]="true"
+      (actionDetails)="abrirDetalhes(req)"/>
   </div>
 </div>
