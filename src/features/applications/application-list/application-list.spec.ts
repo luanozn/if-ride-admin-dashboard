@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashboardRoot } from './dashboard-root';
+import { ApplicationList } from './application-list';
 
-describe('DashboardRoot', () => {
-  let component: DashboardRoot;
-  let fixture: ComponentFixture<DashboardRoot>;
+describe('ApplicationList', () => {
+  let component: ApplicationList;
+  let fixture: ComponentFixture<ApplicationList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardRoot],
+      imports: [ApplicationList],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardRoot);
+    fixture = TestBed.createComponent(ApplicationList);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

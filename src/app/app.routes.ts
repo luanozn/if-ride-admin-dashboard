@@ -15,7 +15,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'applications', pathMatch: 'full' },
       {
         path: 'applications',
-        loadComponent: () => import('../features/dashboard/dashboard-root/dashboard-root').then(m => m.DashboardRoot)
+        loadComponent: () => import('../features/applications/application-list/application-list').then(m => m.ApplicationList)
       },
       {
         path: 'administradores',

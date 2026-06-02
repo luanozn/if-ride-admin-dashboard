@@ -8,9 +8,9 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-applications',
   imports: [MatButton, NgForOf, MatIcon],
-  templateUrl: './dashboard-root.html',
+  templateUrl: './application-list.html',
 })
-export class DashboardRoot {
+export class ApplicationList {
   solicitacoes = [
     { id: 1, nome: 'João Silva', cnh: '123456789', status: 'PENDENTE' },
     { id: 2, nome: 'Pedro Pereira', cnh: '987654312', status: 'APPROVED' },
