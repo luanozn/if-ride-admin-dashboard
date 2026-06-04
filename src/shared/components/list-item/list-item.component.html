@@ -7,11 +7,11 @@
   <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
     <div>
       <span class="text-sm font-medium text-gray-500 block mb-0.5">Nome completo</span>
-      <span class="text-xl font-bold text-gray-950">{{ user.nome }}</span>
+      <span class="text-xl font-bold text-gray-950">{{ user.requester.name }}</span>
     </div>
     <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-xl self-start md:self-center w-fit">
       <mat-icon class="text-gray-400 text-base">card_membership</mat-icon>
-      <span class="text-sm text-gray-700 font-mono">CNH: <strong>{{ user.cnh }}</strong></span>
+      <span class="text-sm text-gray-700 font-mono">CNH: <strong>{{ user.cnhNumber }}</strong></span>
     </div>
   </div>
 

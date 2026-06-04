@@ -11,7 +11,8 @@ import {
 import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon'; // <-- Importante adicionar o MatIcon
-import { NgIf } from '@angular/common'; // <-- Necessário para o *ngIf
+import { NgIf } from '@angular/common';
+import { Application } from '../application-list/state/models/application.model'; // <-- Necessário para o *ngIf
 
 @Component({
   selector: 'app-application-details-dialog',
@@ -34,12 +35,11 @@ import { NgIf } from '@angular/common'; // <-- Necessário para o *ngIf
   templateUrl: './application-details-dialog.html',
 })
 export class ApplicationDetailsDialog {
-  // Alterado para false, assim a tela começa mostrando os botões de Aprovar/Recusar
   exibirInputRecusa = false;
   motivoRecusa = new FormControl('', [Validators.required, Validators.maxLength(255)]);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: Application,
     private dialogRef: MatDialogRef<ApplicationDetailsDialog>,
   ) {}
 

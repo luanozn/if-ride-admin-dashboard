@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { Application } from '../../../features/applications/application-list/state/models/application.model';
 
 @Component({
   selector: 'app-list-item',
@@ -13,7 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './list-item.component.html'
 })
 export class ListItemComponent {
-  @Input({ required: true }) user!: { nome: string; cnh: string };
+  @Input({ required: true }) user!: Application;
 
   @Input() showDetails = false;
   @Input() showDeleteIcon = false;

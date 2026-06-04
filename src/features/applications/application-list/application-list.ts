@@ -1,23 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
-import { NgForOf } from '@angular/common';
 import { ListItemComponent } from '../../../shared/components/list-item/list-item.component';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { ApplicationStore } from './state/application.store';
+import { ApplicationStatus } from './state/models/application-status.enum';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { Application } from './state/models/application.model';
 
 @Component({
   selector: 'app-applications',
-  imports: [ NgForOf, ListItemComponent],
+  imports: [ListItemComponent, MatPaginator, MatProgressSpinner],
   templateUrl: './application-list.html',
 })
 export class ApplicationList {
-  solicitacoes = [
-    { id: 1, nome: 'João Silva', cnh: '123456789', status: 'PENDENTE' },
-    { id: 2, nome: 'Pedro Pereira', cnh: '987654312', status: 'APPROVED' },
-  ];
+  applicationStore = inject(ApplicationStore);
+
+  totalElements = this.applicationStore.totalEntitiesOnPage;
+  pageSize = 20;
+  pageIndex = 0;
 
   constructor(private dialog: MatDialog) {}
 
-  abrirDetalhes(usuario: any) {
+  openDetails(usuario: Application) {
     const dialogRef = this.dialog.open(ApplicationDetailsDialog, {
       width: '500px',
       data: usuario,
@@ -29,6 +34,16 @@ export class ApplicationList {
       } else if (resultado?.action === 'APPROVE') {
         console.log('Aprovado');
       }
+    });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    this.applicationStore.getApplicationsByPage({
+      status: ApplicationStatus.PENDING,
+      page: this.pageIndex,
     });
   }
 }

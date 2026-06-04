@@ -12,12 +12,12 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="flex flex-col">
         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Requerente</span>
-        <span class="text-lg font-bold text-gray-900">{{ data.nome }}</span>
+        <span class="text-lg font-bold text-gray-900">{{ data.requester.name }}</span>
       </div>
       <div class="flex flex-col">
         <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">CNH Informada</span>
         <span class="text-base font-medium text-gray-700 font-mono bg-white border border-gray-200 w-fit px-3 py-1 rounded-lg">
-          {{ data.cnh }}
+          {{ data.cnhNumber }}
         </span>
       </div>
     </div>
