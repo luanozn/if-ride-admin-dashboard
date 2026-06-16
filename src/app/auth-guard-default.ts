@@ -11,13 +11,7 @@ export const defaultAuthGuard: CanActivateFn = () => {
 
   const rawToken = tokenService.loadTokenFromDisk();
 
-  console.log('--- DEBUG DO GUARD ---');
-  console.log('1. Token está no disco?', !!rawToken);
-
   if (rawToken) {
-    console.log('2. O token é válido?', tokenService.isValid(rawToken));
-    console.log('3. Possui permissão ADMIN?', tokenService.hasAdminPermission(rawToken));
-
     try {
       const decoded = jwtDecode(rawToken);
       console.log('4. Estrutura Real do Payload:', decoded);
@@ -25,7 +19,6 @@ export const defaultAuthGuard: CanActivateFn = () => {
       console.error('Falha severa ao decodificar o token', e);
     }
   }
-  console.log('----------------------');
 
   let token = loginStore.token();
   if(!token) {
@@ -33,15 +26,15 @@ export const defaultAuthGuard: CanActivateFn = () => {
 
     if (tokenFromDisk && tokenService.isValid(tokenFromDisk) && tokenService.hasAdminPermission(tokenFromDisk)) {
       loginStore.rehydrate();
-      return router.parseUrl('/dashboard');
+      return router.parseUrl('/applications');
     }
   }
 
   if (token && tokenService.isValid(token) && tokenService.hasAdminPermission(token)) {
-    return router.parseUrl('/dashboard');
+    return router.parseUrl('/applications');
   }
 
-  return router.parseUrl('/login');
+  return true;
 };
 
 export const dashboardAuthGuard: CanActivateFn = () => {

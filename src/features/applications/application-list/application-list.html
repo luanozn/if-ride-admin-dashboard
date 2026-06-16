@@ -1,0 +1,34 @@
+<div class="dashboard-container p-6 md:p-8 bg-gray-50 min-h-screen">
+  <div class="header-section mb-8 flex items-center justify-between">
+    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">Solicitações Pendentes</h2>
+    <span class="bg-green-100 text-primary font-semibold px-4 py-1.5 rounded-full text-sm">
+      {{ applicationStore.totalEntities() }} Total
+    </span>
+  </div>
+
+  @if (applicationStore.loading()) {
+    <div class="loading-overlay">
+      <mat-progress-spinner
+        color="primary"
+        mode="indeterminate"
+        diameter="96"> </mat-progress-spinner>
+    </div>
+  } @else {
+
+    <div class="list-content">
+      @for (item of applicationStore.entities(); track item.id) {
+        <app-list-item class="mb-2" [user]="item" [showDetails]="true" (click)="openDetails(item)"></app-list-item>
+      }
+
+      <mat-paginator
+        class="mt-2"
+        [length]="applicationStore.totalEntities()"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        aria-label="Selecione a página">
+      </mat-paginator>
+    </div>
+  }
+</div>
+

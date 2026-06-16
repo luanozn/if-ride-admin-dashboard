@@ -1,0 +1,56 @@
+<h2 mat-dialog-title class="!m-0 !p-6 !pb-4 border-b border-gray-100">
+  <div class="flex items-center gap-3">
+    <div class="bg-[#3b8c2e]/15 w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-[#3b8c2e]">
+      <mat-icon>assignment_ind</mat-icon>
+    </div>
+    <span class="text-2xl font-bold text-gray-800">Revisão de Cadastro</span>
+  </div>
+</h2>
+
+<mat-dialog-content class="!p-6 mat-typography min-w-[400px]">
+  <div class="bg-gray-50 rounded-xl p-5 mb-5 border border-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col">
+        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Requerente</span>
+        <span class="text-lg font-bold text-gray-900">{{ data.requester.name }}</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">CNH Informada</span>
+        <span class="text-base font-medium text-gray-700 font-mono bg-white border border-gray-200 w-fit px-3 py-1 rounded-lg">
+          {{ data.cnhNumber }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showDenyInput" class="mt-6 transition-all duration-300">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Motivo da recusa</mat-label>
+      <textarea matInput [formControl]="denialReason" rows="3" maxlength="255"
+                placeholder="Ex: CNH ilegível, documento vencido..."></textarea>
+      <mat-hint align="end">{{ denialReason.value?.length || 0 }}/255</mat-hint>
+      <mat-error *ngIf="denialReason.hasError('required')">A justificativa é obrigatória.</mat-error>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="!p-4 !px-6 border-t border-gray-100 bg-gray-50/50">
+  <button mat-button mat-dialog-close class="!rounded-full text-gray-600 hover:bg-gray-100">
+    {{ showDenyInput ? 'Voltar' : 'Cancelar' }}
+  </button>
+
+  <ng-container *ngIf="!showDenyInput">
+    <button mat-flat-button class="!rounded-full !bg-[#b91a2b] text-white hover:!bg-[#93001a]" (click)="showDeny()">
+      Recusar Motorista
+    </button>
+    <button mat-flat-button class="!rounded-full !bg-[#3b8c2e] text-white hover:!bg-[#2e6d23]" (click)="approveApplication()">
+      Aprovar Acesso
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="showDenyInput">
+    <button mat-flat-button class="!rounded-full !bg-[#b91a2b] text-white hover:!bg-[#93001a]" (click)="denyApplication()">
+      Confirmar Rejeição
+    </button>
+  </ng-container>
+</mat-dialog-actions>

@@ -1,0 +1,36 @@
+<div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 flex items-center gap-6 w-full">
+
+  <div class="flex-shrink-0 bg-indigo-50 text-primary p-4 rounded-full border border-indigo-100">
+    <mat-icon class="scale-125">person_outline</mat-icon>
+  </div>
+
+  <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+    <div>
+      <span class="text-sm font-medium text-gray-500 block mb-0.5">Nome completo</span>
+      <span class="text-xl font-bold text-gray-950">{{ user.requester.name }}</span>
+    </div>
+    <div class="flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-xl self-start md:self-center w-fit">
+      <mat-icon class="text-gray-400 text-base">card_membership</mat-icon>
+      <span class="text-sm text-gray-700 font-mono">CNH: <strong>{{ user.cnhNumber }}</strong></span>
+    </div>
+  </div>
+
+  <div class="flex-shrink-0 flex items-center gap-3">
+
+    <button *ngIf="showDetails"
+            mat-flat-button color="primary"
+            class="flex items-center gap-2 rounded-full px-6 py-3 h-auto"
+            (click)="actionDetails.emit()">
+      <mat-icon class="text-lg">open_in_new</mat-icon>
+      <span class="font-semibold">Ver Detalhes</span>
+    </button>
+
+    <button *ngIf="showDeleteIcon"
+            mat-icon-button color="warn"
+            class="bg-red-50 hover:bg-red-100 !text-[#93001a] transition-colors"
+            (click)="actionDelete.emit()">
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+
+  </div>
+</div>
