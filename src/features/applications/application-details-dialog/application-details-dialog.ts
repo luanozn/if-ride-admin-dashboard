@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   MAT_DIALOG_DATA,
@@ -12,7 +12,8 @@ import { MatError, MatFormField, MatHint, MatInput, MatLabel } from '@angular/ma
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon'; // <-- Importante adicionar o MatIcon
 import { NgIf } from '@angular/common';
-import { Application } from '../application-list/state/models/application.model'; // <-- Necessário para o *ngIf
+import { Application } from '../application-list/state/models/application.model';
+import { ApplicationStore } from '../application-list/state/application.store'; // <-- Necessário para o *ngIf
 
 @Component({
   selector: 'app-application-details-dialog',
@@ -35,30 +36,38 @@ import { Application } from '../application-list/state/models/application.model'
   templateUrl: './application-details-dialog.html',
 })
 export class ApplicationDetailsDialog {
-  exibirInputRecusa = false;
-  motivoRecusa = new FormControl('', [Validators.required, Validators.maxLength(255)]);
+  showDenyInput = false;
+  denialReason = new FormControl('', [Validators.required, Validators.maxLength(255)]);
+
+  applicationStore = inject(ApplicationStore);
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Application,
     private dialogRef: MatDialogRef<ApplicationDetailsDialog>,
   ) {}
 
-  iniciarRecusa() {
-    this.exibirInputRecusa = true;
+  showDeny() {
+    this.showDenyInput = true;
   }
 
-  confirmarRecusa() {
-    if (this.motivoRecusa.invalid) {
-      this.motivoRecusa.markAsTouched();
+  async denyApplication() {
+    if (this.denialReason.invalid) {
+      this.denialReason.markAsTouched();
       return;
     }
-    this.dialogRef.close({
-      action: 'REJECT',
-      reason: this.motivoRecusa.value,
-    });
+
+    const isSuccess = await this.applicationStore.reject(this.data.requester.id, this.denialReason.value!);
+
+    if (isSuccess) {
+      this.dialogRef.close();
+    }
   }
 
-  aprovar() {
-    this.dialogRef.close({ action: 'APPROVE' });
+  async approveApplication() {
+    const isSuccess = await this.applicationStore.approve(this.data.requester.id);
+
+    if (isSuccess) {
+      this.dialogRef.close();
+    }
   }
 }

@@ -16,7 +16,6 @@ import { Application } from './state/models/application.model';
 export class ApplicationList {
   applicationStore = inject(ApplicationStore);
 
-  totalElements = this.applicationStore.totalEntitiesOnPage;
   pageSize = 20;
   pageIndex = 0;
 
@@ -44,6 +43,7 @@ export class ApplicationList {
     this.applicationStore.getApplicationsByPage({
       status: ApplicationStatus.PENDING,
       page: this.pageIndex,
+      size: this.pageSize,
     });
   }
 }

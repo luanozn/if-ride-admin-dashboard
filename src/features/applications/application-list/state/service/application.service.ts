@@ -10,7 +10,7 @@ import { Page } from '../../../../../shared/models/utils/page.model';
 export class ApplicationService extends BaseService<Application> {
   protected readonly path = 'v1/driver-requests';
 
-  getDriverApplications(status?: ApplicationStatus, page?: number): Observable<Page<Application>> {
+  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number): Observable<Page<Application>> {
     let queryParams: HttpParams = new HttpParams();
 
     if (status) {
@@ -23,8 +23,16 @@ export class ApplicationService extends BaseService<Application> {
       queryParams = queryParams.append('page', 0);
     }
 
-    queryParams = queryParams.append('size', 20)
+    queryParams = queryParams.append('size', size ?? 20)
 
     return this.getPaged(undefined, queryParams);
+  }
+
+  approveDriverApplication(userId: string): Observable<Application> {
+    return this.patch<Application>(`${userId}/approve`, {});
+  }
+
+  rejectDriverApplication(userId: string, rejectionReason: string): Observable<Application> {
+    return this.patch<Application>(`${userId}/reject`, { rejectionReason});
   }
 }
