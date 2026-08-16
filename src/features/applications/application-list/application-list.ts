@@ -1,30 +1,26 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
-import { ListItemComponent } from '../../../shared/components/list-item/list-item.component';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { ApplicationStore } from './state/application.store';
 import { ApplicationStatus } from './state/models/application-status.enum';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Application } from './state/models/application.model';
+import { GenericList } from '../../../shared/components/generic-list/generic-list';
 
 @Component({
   selector: 'app-applications',
-  imports: [ListItemComponent, MatPaginator, MatProgressSpinner],
+  imports: [GenericList],
   templateUrl: './application-list.html',
 })
 export class ApplicationList {
   applicationStore = inject(ApplicationStore);
 
-  pageSize = 20;
-  pageIndex = 0;
-
   constructor(private dialog: MatDialog) {}
 
-  openDetails(usuario: Application) {
+  openDetails(user: Application) {
     const dialogRef = this.dialog.open(ApplicationDetailsDialog, {
       width: '500px',
-      data: usuario,
+      data: user,
     });
 
     dialogRef.afterClosed().subscribe((resultado) => {
@@ -37,13 +33,10 @@ export class ApplicationList {
   }
 
   onPageChange(event: PageEvent) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-
     this.applicationStore.getApplicationsByPage({
       status: ApplicationStatus.PENDING,
-      page: this.pageIndex,
-      size: this.pageSize,
+      page: event.pageIndex,
+      size: event.pageSize,
     });
   }
 }

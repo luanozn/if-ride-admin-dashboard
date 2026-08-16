@@ -1,0 +1,12 @@
+<app-list
+  [title]="'Administradores'"
+  [entities]="administratorStore.entities()"
+  [totalEntities]="administratorStore.totalItems()"
+  [loading]="administratorStore.loading()"
+  [showCreationButton]="true"
+  [showDetails]="false"
+  [showDeletionIcon]="true"
+
+  (pageChange)="onPageChange($event)"
+  (createButtonClicked)="openCreateAdminDialog()"
+/>

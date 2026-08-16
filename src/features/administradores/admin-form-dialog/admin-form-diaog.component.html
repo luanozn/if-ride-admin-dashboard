@@ -1,0 +1,64 @@
+<div class="p-6 md:p-8">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-900 tracking-tight m-0">Novo Administrador</h2>
+    <button mat-icon-button (click)="cancel()" class="text-gray-500 hover:text-gray-900 transition-colors">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <mat-form-field appearance="outline" class="w-full md:col-span-2">
+        <mat-label>Nome completo</mat-label>
+        <input matInput formControlName="name" placeholder="Ex: Tricia McMillan">
+        @if (form.get('name')?.hasError('required') && form.get('name')?.touched) {
+          <mat-error>O nome é obrigatório</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>E-mail</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="Ex: trillian@estudante.ifgoiano.edu.br">
+        @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+          <mat-error>O e-mail é obrigatório</mat-error>
+        }
+        @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+          <mat-error>E-mail inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>CPF</mat-label>
+        <input matInput formControlName="documentNumber" placeholder="Ex: 123.456.789-00" maxlength="11">
+        @if (form.get('documentNumber')?.hasError('required') && form.get('documentNumber')?.touched) {
+          <mat-error>O documento é obrigatório</mat-error>
+        }
+        @if (form.get('documentNumber')?.hasError('cpf') && form.get('documentNumber')?.touched) {
+          <mat-error>Número de CPF inválido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-full md:col-span-2">
+        <mat-label>Senha</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Mínimo 8 caracteres">
+        @if (form.get('password')?.hasError('required') && form.get('password')?.touched) {
+          <mat-error>A senha é obrigatória</mat-error>
+        }
+        @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+          <mat-error>A senha deve ter no mínimo 8 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+    </div>
+
+    <div class="flex items-center justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
+      <button mat-button type="button" class="rounded-full px-6 py-2" (click)="cancel()">
+        Cancelar
+      </button>
+      <button mat-flat-button color="primary" type="submit" class="rounded-full px-6 py-2 font-semibold" [disabled]="!form.valid">
+        Cadastrar
+      </button>
+    </div>
+  </form>
+</div>

@@ -5,12 +5,13 @@ import { Application } from '../models/application.model';
 import { ApplicationStatus } from '../models/application-status.enum';
 import { HttpParams } from '@angular/common/http';
 import { Page } from '../../../../../shared/models/utils/page.model';
+import { ApplicationDTO } from '../models/application-dto.model';
 
 @Injectable({ providedIn: 'root' })
-export class ApplicationService extends BaseService<Application> {
+export class ApplicationService extends BaseService<ApplicationDTO> {
   protected readonly path = 'v1/driver-requests';
 
-  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number): Observable<Page<Application>> {
+  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number): Observable<Page<ApplicationDTO>> {
     let queryParams: HttpParams = new HttpParams();
 
     if (status) {
@@ -28,11 +29,11 @@ export class ApplicationService extends BaseService<Application> {
     return this.getPaged(undefined, queryParams);
   }
 
-  approveDriverApplication(userId: string): Observable<Application> {
+  approveDriverApplication(userId: string): Observable<ApplicationDTO> {
     return this.patch<Application>(`${userId}/approve`, {});
   }
 
-  rejectDriverApplication(userId: string, rejectionReason: string): Observable<Application> {
+  rejectDriverApplication(userId: string, rejectionReason: string): Observable<ApplicationDTO> {
     return this.patch<Application>(`${userId}/reject`, { rejectionReason});
   }
 }

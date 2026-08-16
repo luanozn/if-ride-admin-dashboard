@@ -24,6 +24,7 @@
     "@angular/ssr": "^21.2.9",
     "@ngrx/operators": "^21.1.0",
     "@ngrx/signals": "^21.1.0",
+    "cpf-cnpj-validator": "^2.1.2",
     "express": "^5.1.0",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",

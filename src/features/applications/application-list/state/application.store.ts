@@ -8,6 +8,7 @@ import { ApplicationService } from './service/application.service';
 import { ApplicationStatus } from './models/application-status.enum';
 import { Application } from './models/application.model';
 import { Page } from '../../../../shared/models/utils/page.model';
+import { ApplicationDTO } from './models/application-dto.model';
 
 export type ApplicationStore = {
   entities: Application[];
@@ -44,9 +45,9 @@ export const ApplicationStore = signalStore(
           switchMap(({ status, page }) =>
             applicationService.getDriverApplications(status, page).pipe(
               tapResponse({
-                next: (pagedResponse: Page<Application>) => {
+                next: (pagedResponse: Page<ApplicationDTO>) => {
                   patchState(store, {
-                    entities: pagedResponse.content,
+                    entities: pagedResponse.content.map(dto => Application.from(dto)),
                     totalItems: pagedResponse.totalElements,
                     loading: false,
                   });
