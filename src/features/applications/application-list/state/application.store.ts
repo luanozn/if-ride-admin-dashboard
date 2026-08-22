@@ -38,12 +38,12 @@ export const ApplicationStore = signalStore(
   withMethods(
     (store, applicationService = inject(ApplicationService), snack = inject(MatSnackBar)) => ({
 
-      getApplicationsByPage: rxMethod<{ status: ApplicationStatus; page: number, size: number }>(
+      getApplicationsByPage: rxMethod<{ status: ApplicationStatus; page: number, size: number, document?: string }>(
         pipe(
           tap(() => patchState(store, { entities: [], loading: true })),
 
-          switchMap(({ status, page }) =>
-            applicationService.getDriverApplications(status, page).pipe(
+          switchMap(({ status, page, size, document }) =>
+            applicationService.getDriverApplications(status, page, size, document).pipe(
               tapResponse({
                 next: (pagedResponse: Page<ApplicationDTO>) => {
                   patchState(store, {

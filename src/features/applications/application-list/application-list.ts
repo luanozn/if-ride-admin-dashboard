@@ -11,32 +11,44 @@ import { GenericList } from '../../../shared/components/generic-list/generic-lis
   selector: 'app-applications',
   imports: [GenericList],
   templateUrl: './application-list.html',
+  standalone: true,
 })
 export class ApplicationList {
   applicationStore = inject(ApplicationStore);
+  private dialog = inject(MatDialog);
 
-  constructor(private dialog: MatDialog) {}
+  pageIndex = 0;
+  pageSize = 20;
+  currentDocument?: string;
 
   openDetails(user: Application) {
-    const dialogRef = this.dialog.open(ApplicationDetailsDialog, {
+    this.dialog.open(ApplicationDetailsDialog, {
       width: '500px',
       data: user,
-    });
-
-    dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado?.action === 'REJECT') {
-        console.log('Recusado por:', resultado.reason);
-      } else if (resultado?.action === 'APPROVE') {
-        console.log('Aprovado');
-      }
     });
   }
 
   onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
     this.applicationStore.getApplicationsByPage({
       status: ApplicationStatus.PENDING,
-      page: event.pageIndex,
-      size: event.pageSize,
+      page: this.pageIndex,
+      size: this.pageSize,
+    });
+  }
+
+  applySearch(document: string) {
+    this.pageIndex = 0;
+    this.pageSize = 20;
+    this.currentDocument = document;
+
+    this.applicationStore.getApplicationsByPage({
+      status: ApplicationStatus.PENDING,
+      page: this.pageIndex,
+      size: this.pageSize,
+      document: document,
     });
   }
 }

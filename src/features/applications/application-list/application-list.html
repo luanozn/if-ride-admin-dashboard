@@ -6,7 +6,9 @@
   [showCreationButton]="false"
   [showDetails]="true"
   [showDeletionIcon]="false"
+  [showSearchButton]="false"
 
   (pageChange)="onPageChange($event)"
   (openDetails)="openDetails($event)"
+  (searchButtonClicked)="applySearch($event)"
 />

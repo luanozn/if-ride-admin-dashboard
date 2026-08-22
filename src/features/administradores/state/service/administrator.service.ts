@@ -9,14 +9,23 @@ import { Observable } from 'rxjs';
 export class AdministratorService extends BaseService<AdministratorDTO> {
   protected override path = 'v1/admins';
 
-  findAll(page?: number, size?: number): Observable<Page<AdministratorDTO>> {
-    const queryParams = new HttpParams({
+  findAll(page?: number, size?: number, document?: string): Observable<Page<AdministratorDTO>> {
+    let queryParams = new HttpParams({
       fromObject: {
         page: page ?? 0,
         size: size ?? 20,
-      },
+        sort: 'name',
+      }
     });
 
-    return this.getPaged('', queryParams)
+    if (document) {
+      queryParams = queryParams.set('document', document);
+    }
+
+    return this.getPaged('', queryParams);
+  }
+
+  deleteAdministrator(administratorId: string): Observable<void> {
+    return this.delete(administratorId);
   }
 }

@@ -1,14 +1,11 @@
 import { AdministratorDTO } from './models/administrator-dto.model';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { ApplicationStatus } from '../../applications/application-list/state/models/application-status.enum';
-import { ApplicationService } from '../../applications/application-list/state/service/application.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { firstValueFrom, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { Page } from '../../../shared/models/utils/page.model';
-import { Application } from '../../applications/application-list/state/models/application.model';
 import { AdministratorService } from './service/administrator.service';
 import { Administrator } from './models/administrator.model';
 
@@ -35,12 +32,12 @@ export const AdministratorStore = signalStore(
 
   withMethods(
     (store, administratorService = inject(AdministratorService), snack = inject(MatSnackBar)) => ({
-      getAdministratorsByPage: rxMethod<{ page: number; size: number }>(
+      getAdministratorsByPage: rxMethod<{ page: number; size: number, document?: string }>(
         pipe(
           tap(() => patchState(store, { entities: [], loading: true })),
 
-          switchMap(({ page, size }) =>
-            administratorService.findAll(page, size).pipe(
+          switchMap(({ page, size, document }) =>
+            administratorService.findAll(page, size, document).pipe(
               tapResponse({
                 next: (pagedResponse: Page<AdministratorDTO>) => {
                   patchState(store, {
@@ -61,12 +58,29 @@ export const AdministratorStore = signalStore(
           ),
         ),
       ),
+
+      async delete(adminId: string): Promise<boolean> {
+        patchState(store, { loading: true });
+        try {
+          await firstValueFrom(administratorService.deleteAdministrator(adminId));
+
+          const updatedEntities = store.entities().filter(adm => adm.id !== adminId);
+          patchState(store, { entities: updatedEntities, loading: false });
+
+          snack.open('Administrador deletado com sucesso', 'Fechar', { duration: 4000 });
+          return true;
+        } catch (error) {
+          patchState(store, { loading: false });
+          snack.open('Erro ao deletar o administrador', 'Fechar', { duration: 8000, panelClass: ['error-snackbar'] });
+          return false;
+        }
+      },
     }),
   ),
 
   withHooks({
     onInit(store) {
-      store.getAdministratorsByPage({ page: 0, size: 20 });
+      store.getAdministratorsByPage({ page: 0, size: 20, document: '' });
     },
     onDestroy() {
       console.log('ApplicationStore destruído');
