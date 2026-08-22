@@ -1,0 +1,64 @@
+<div class="dashboard-container p-6 md:p-8 bg-gray-50 min-h-screen">
+  <div class="header-section mb-8 flex items-center justify-between">
+    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ title }}</h2>
+    <span class="bg-green-100 text-primary font-semibold px-4 py-1.5 rounded-full text-sm">
+      {{ totalEntities }} Total
+    </span>
+
+    @if(showCreationButton) {
+      <button mat-flat-button color="primary" class="flex items-center gap-2 rounded-full px-6 py-3 h-auto" (click)="createButtonClicked.emit()">
+        <mat-icon class="text-lg">add</mat-icon>
+        <span class="font-semibold">Novo {{entityName}}</span>
+      </button>
+    }
+  </div>
+
+  @if(showSearchButton) {
+  <div>
+    <mat-form-field>
+      <mat-label>Busque por documento</mat-label>
+      <input matInput [type]="'text'" #searchInput />
+    </mat-form-field>
+    <button
+      class="bg-primary text-primary-dark ml-3"
+      mat-icon-button
+      (click)="searchButtonClicked.emit(searchInput.value)"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+  }
+
+  @if (loading) {
+    <div class="loading-overlay">
+      <mat-progress-spinner
+        color="primary"
+        mode="indeterminate"
+        diameter="96"></mat-progress-spinner>
+    </div>
+  } @else {
+
+    <div class="list-content">
+      @for (item of entities; track item.id) {
+        <app-list-item
+          class="mb-2"
+          [user]="item"
+          [showDetails]="showDetails"
+          [showDeleteIcon]="showDeletionIcon"
+          (click)="openDetails.emit(item)"
+          (actionDelete)="deleteButtonClicked.emit(item)"
+        />
+      }
+
+      <mat-paginator
+        class="mt-2"
+        [length]="totalEntities"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        (page)="onPageChange($event)"
+        aria-label="Selecione a página">
+      </mat-paginator>
+    </div>
+  }
+</div>
+

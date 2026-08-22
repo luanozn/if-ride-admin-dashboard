@@ -5,34 +5,34 @@ import { Application } from '../models/application.model';
 import { ApplicationStatus } from '../models/application-status.enum';
 import { HttpParams } from '@angular/common/http';
 import { Page } from '../../../../../shared/models/utils/page.model';
+import { ApplicationDTO } from '../models/application-dto.model';
 
 @Injectable({ providedIn: 'root' })
-export class ApplicationService extends BaseService<Application> {
+export class ApplicationService extends BaseService<ApplicationDTO> {
   protected readonly path = 'v1/driver-requests';
 
-  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number): Observable<Page<Application>> {
-    let queryParams: HttpParams = new HttpParams();
-
+  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number, document?: string): Observable<Page<ApplicationDTO>> {
+    let queryParams = new HttpParams({
+      fromObject: {
+        page: page ?? 0,
+        size: size ?? 20,
+      }
+    });
     if (status) {
       queryParams = queryParams.append('statuses', status);
     }
-
-    if(page) {
-      queryParams = queryParams.append('page', page);
-    } else {
-      queryParams = queryParams.append('page', 0);
+    if(document) {
+      queryParams = queryParams.append('document', document);
     }
-
-    queryParams = queryParams.append('size', size ?? 20)
 
     return this.getPaged(undefined, queryParams);
   }
 
-  approveDriverApplication(userId: string): Observable<Application> {
+  approveDriverApplication(userId: string): Observable<ApplicationDTO> {
     return this.patch<Application>(`${userId}/approve`, {});
   }
 
-  rejectDriverApplication(userId: string, rejectionReason: string): Observable<Application> {
+  rejectDriverApplication(userId: string, rejectionReason: string): Observable<ApplicationDTO> {
     return this.patch<Application>(`${userId}/reject`, { rejectionReason});
   }
 }

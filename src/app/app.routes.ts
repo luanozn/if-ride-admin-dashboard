@@ -19,7 +19,7 @@ export const routes: Routes = [
       },
       {
         path: 'administradores',
-        loadComponent: () => import('../features/administradores/administradores').then(m => m.Administradores)
+        loadComponent: () => import('../features/administradores/administrators.component').then(m => m.Administrators)
       }
     ]
   },

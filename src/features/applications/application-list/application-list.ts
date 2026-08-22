@@ -1,38 +1,30 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
-import { ListItemComponent } from '../../../shared/components/list-item/list-item.component';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { PageEvent } from '@angular/material/paginator';
 import { ApplicationStore } from './state/application.store';
 import { ApplicationStatus } from './state/models/application-status.enum';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Application } from './state/models/application.model';
+import { GenericList } from '../../../shared/components/generic-list/generic-list';
 
 @Component({
   selector: 'app-applications',
-  imports: [ListItemComponent, MatPaginator, MatProgressSpinner],
+  imports: [GenericList],
   templateUrl: './application-list.html',
+  standalone: true,
 })
 export class ApplicationList {
   applicationStore = inject(ApplicationStore);
+  private dialog = inject(MatDialog);
 
-  pageSize = 20;
   pageIndex = 0;
+  pageSize = 20;
+  currentDocument?: string;
 
-  constructor(private dialog: MatDialog) {}
-
-  openDetails(usuario: Application) {
-    const dialogRef = this.dialog.open(ApplicationDetailsDialog, {
+  openDetails(user: Application) {
+    this.dialog.open(ApplicationDetailsDialog, {
       width: '500px',
-      data: usuario,
-    });
-
-    dialogRef.afterClosed().subscribe((resultado) => {
-      if (resultado?.action === 'REJECT') {
-        console.log('Recusado por:', resultado.reason);
-      } else if (resultado?.action === 'APPROVE') {
-        console.log('Aprovado');
-      }
+      data: user,
     });
   }
 
@@ -44,6 +36,19 @@ export class ApplicationList {
       status: ApplicationStatus.PENDING,
       page: this.pageIndex,
       size: this.pageSize,
+    });
+  }
+
+  applySearch(document: string) {
+    this.pageIndex = 0;
+    this.pageSize = 20;
+    this.currentDocument = document;
+
+    this.applicationStore.getApplicationsByPage({
+      status: ApplicationStatus.PENDING,
+      page: this.pageIndex,
+      size: this.pageSize,
+      document: document,
     });
   }
 }
