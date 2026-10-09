@@ -6,9 +6,13 @@
   [showCreationButton]="false"
   [showDetails]="true"
   [showDeletionIcon]="false"
-  [showSearchButton]="false"
+  [showSearch]="true"
+  [searchLabel]="'Buscar por CNH (Enter para enviar):'"
+  [searchPlaceholder]="'Número da CNH:'"
+  [searchInputMode]="'numeric'"
+  [searchTrigger]="'enter'"
 
   (pageChange)="onPageChange($event)"
   (openDetails)="openDetails($event)"
-  (searchButtonClicked)="applySearch($event)"
+  (searchChanged)="applySearch($event)"
 />

@@ -6,7 +6,7 @@ import { ShowableEntity } from '../../models/utils/showable-entity.model';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { debounceTime, distinctUntilChanged, merge, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
@@ -25,7 +25,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './generic-list.html',
   standalone: true,
 })
-export class GenericList<T extends ShowableEntity> implements OnInit{
+export class GenericList<T extends ShowableEntity> implements OnInit {
   @Input() title: string = '';
   @Input() totalEntities: number = 0;
   @Input() loading: boolean = false;
@@ -33,11 +33,16 @@ export class GenericList<T extends ShowableEntity> implements OnInit{
   @Input() showDetails = false;
   @Input() showDeletionIcon = false;
   @Input() showCreationButton = false;
-  @Input() showSearchButton = false;
+  @Input() showSearch = false;
+  @Input() showExactMatchButton = false;
   @Input() entityName: string = '';
+  @Input() searchLabel = 'Buscar';
+  @Input() searchPlaceholder = '';
+  @Input() searchInputMode: 'text' | 'numeric' = 'text';
+  @Input() searchMinChars = 0;
+  @Input() searchTrigger: 'debounce' | 'enter' = 'debounce';
 
   @Input() searchDebounceMs = 500;
-
 
   @Output() searchChanged = new EventEmitter<string>();
   @Output() openDetails: EventEmitter<T> = new EventEmitter();
@@ -52,18 +57,26 @@ export class GenericList<T extends ShowableEntity> implements OnInit{
   pageIndex = 0;
 
   ngOnInit(): void {
-    merge(
-      this.inputTerm$.pipe(
-        debounceTime(this.searchDebounceMs),
-        distinctUntilChanged()
-      ),
-    )
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(term => this.searchChanged.emit(term));
+    this.inputTerm$
+      .pipe(
+        debounceTime(this.searchTrigger === 'debounce' ? this.searchDebounceMs : 0),
+        distinctUntilChanged(),
+        filter((term) => term.length >= this.searchMinChars),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((term) => this.searchChanged.emit(term));
   }
 
   onSearchInput(value: string): void {
-    this.inputTerm$.next(value);
+    if(this.searchTrigger === 'debounce') {
+      this.inputTerm$.next(value);
+    }
+  }
+
+  onEnter(value: string): void {
+    if (this.searchTrigger === 'enter') {
+      this.inputTerm$.next(value);
+    }
   }
 
   onPageChange(event: PageEvent) {

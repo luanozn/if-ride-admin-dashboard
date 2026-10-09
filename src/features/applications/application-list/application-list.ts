@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ApplicationDetailsDialog } from '../application-details-dialog/application-details-dialog';
 import { PageEvent } from '@angular/material/paginator';
@@ -19,7 +19,7 @@ export class ApplicationList {
 
   pageIndex = 0;
   pageSize = 20;
-  currentDocument?: string;
+  currentCNH?: string;
 
   openDetails(user: Application) {
     this.dialog.open(ApplicationDetailsDialog, {
@@ -39,17 +39,16 @@ export class ApplicationList {
     });
   }
 
-  applySearch(document: any) {
-    console.log(document)
+  applySearch(cnh: string) {
     this.pageIndex = 0;
     this.pageSize = 20;
-    this.currentDocument = document;
+    this.currentCNH = cnh;
 
     this.applicationStore.getApplicationsByPage({
       status: ApplicationStatus.PENDING,
       page: this.pageIndex,
       size: this.pageSize,
-      document: document,
+      cnh: cnh,
     });
   }
 }
