@@ -1,6 +1,6 @@
 <app-list
   [title]="'Requisições pendentes'"
-  [totalEntities]="applicationStore.entities().length"
+  [totalEntities]="applicationStore.totalEntities()"
   [entities]="applicationStore.pendingApplications()"
   [loading]="applicationStore.loading()"
   [showCreationButton]="false"
