@@ -1,9 +1,9 @@
-import { Component, DestroyRef, EventEmitter, inject, Input, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { ListItemComponent } from '../list-item/list-item.component';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { ShowableEntity } from '../../models/utils/showable-entity.model';
-import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { debounceTime, distinctUntilChanged, merge, Subject } from 'rxjs';
@@ -21,12 +21,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatFormField,
     MatLabel,
     MatInput,
-    MatIconButton,
   ],
   templateUrl: './generic-list.html',
   standalone: true,
 })
-export class GenericList<T extends ShowableEntity> {
+export class GenericList<T extends ShowableEntity> implements OnInit{
   @Input() title: string = '';
   @Input() totalEntities: number = 0;
   @Input() loading: boolean = false;

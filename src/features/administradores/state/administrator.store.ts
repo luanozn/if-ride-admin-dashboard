@@ -32,12 +32,12 @@ export const AdministratorStore = signalStore(
 
   withMethods(
     (store, administratorService = inject(AdministratorService), snack = inject(MatSnackBar)) => ({
-      getAdministratorsByPage: rxMethod<{ page: number; size: number, document?: string }>(
+      getAdministratorsByPage: rxMethod<{ page: number; size: number, search?: string }>(
         pipe(
           tap(() => patchState(store, { entities: [], loading: true })),
 
-          switchMap(({ page, size, document }) =>
-            administratorService.findAll(page, size, document).pipe(
+          switchMap(({ page, size, search }) =>
+            administratorService.findAll(page, size, search).pipe(
               tapResponse({
                 next: (pagedResponse: Page<AdministratorDTO>) => {
                   patchState(store, {
@@ -80,7 +80,7 @@ export const AdministratorStore = signalStore(
 
   withHooks({
     onInit(store) {
-      store.getAdministratorsByPage({ page: 0, size: 20, document: '' });
+      store.getAdministratorsByPage({ page: 0, size: 20, search: '' });
     },
     onDestroy() {
       console.log('ApplicationStore destruído');

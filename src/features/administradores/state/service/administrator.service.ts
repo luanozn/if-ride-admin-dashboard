@@ -19,7 +19,7 @@ export class AdministratorService extends BaseService<AdministratorDTO> {
     });
 
     if (document) {
-      queryParams = queryParams.set('document', document);
+      queryParams = queryParams.set('search', document);
     }
 
     return this.getPaged('', queryParams);
