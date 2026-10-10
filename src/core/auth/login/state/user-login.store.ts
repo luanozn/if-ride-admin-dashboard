@@ -77,7 +77,9 @@ export const LoginStore = signalStore(
             expiration: authInfo.expireDate,
             isLoading: false,
           });
-          await router.navigate(['/dashboard']);
+
+          const returnUrl = getSafeReturnUrl(router);
+          await router.navigateByUrl(returnUrl);
 
         } catch (error) {
           let errorMessage = 'Ocorreu um erro inesperado. Tente novamente mais tarde.';
@@ -111,3 +113,15 @@ export const LoginStore = signalStore(
     },
   })),
 );
+
+function getSafeReturnUrl(router: Router): string {
+  const nav = router.currentNavigation();
+  const fromNav = nav?.extractedUrl.queryParams?.['returnUrl'];
+  const fromState = router.routerState.snapshot.root.queryParams['returnUrl'];
+  const candidate = fromNav ?? fromState;
+
+  if (typeof candidate === 'string' && candidate.startsWith('/') && !candidate.startsWith('//')) {
+    return candidate;
+  }
+  return '/dashboard';
+}
