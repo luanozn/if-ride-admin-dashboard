@@ -15,7 +15,7 @@ export class Administrators {
   administratorStore = inject(AdministratorStore);
   pageSize = 20;
   pageIndex = 0;
-  currentDocument?: string;
+  currentSearch?: string;
 
   constructor(private dialog: MatDialog) {}
 
@@ -37,19 +37,19 @@ export class Administrators {
     this.administratorStore.getAdministratorsByPage({
       page: this.pageIndex,
       size: this.pageSize,
-      document: this.currentDocument
+      search: this.currentSearch
     });
   }
 
-  applySearch(document: string) {
-    this.currentDocument = document;
+  applySearch(searchTerm: string) {
+    this.currentSearch = searchTerm;
     this.pageIndex = 0;
     this.pageSize = 20;
 
     this.administratorStore.getAdministratorsByPage({
       page: this.pageIndex,
       size: this.pageSize,
-      document: document,
+      search: searchTerm,
     })
   }
 }

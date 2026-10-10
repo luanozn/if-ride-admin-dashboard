@@ -11,7 +11,7 @@ import { ApplicationDTO } from '../models/application-dto.model';
 export class ApplicationService extends BaseService<ApplicationDTO> {
   protected readonly path = 'v1/driver-requests';
 
-  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number, document?: string): Observable<Page<ApplicationDTO>> {
+  getDriverApplications(status?: ApplicationStatus, page?: number, size?: number, cnh?: string): Observable<Page<ApplicationDTO>> {
     let queryParams = new HttpParams({
       fromObject: {
         page: page ?? 0,
@@ -21,8 +21,8 @@ export class ApplicationService extends BaseService<ApplicationDTO> {
     if (status) {
       queryParams = queryParams.append('statuses', status);
     }
-    if(document) {
-      queryParams = queryParams.append('document', document);
+    if(cnh) {
+      queryParams = queryParams.append('cnh', cnh);
     }
 
     return this.getPaged(undefined, queryParams);
